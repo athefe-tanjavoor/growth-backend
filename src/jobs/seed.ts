@@ -20,7 +20,15 @@ export async function seedDatabase() {
       await admin.save();
       logger.info(`✅ Initial Super Admin created successfully [${config.seed.adminEmail}]`);
     } else {
-      logger.info(`Admin user [${config.seed.adminEmail}] already exists; skipping seed.`);
+      const isMatch = await existingAdmin.comparePassword(config.seed.adminPassword);
+      if (!isMatch) {
+        existingAdmin.password = config.seed.adminPassword;
+        existingAdmin.isActive = true;
+        await existingAdmin.save();
+        logger.info(`🔑 Reset password for existing admin: [${config.seed.adminEmail}]`);
+      } else {
+        logger.info(`Admin user [${config.seed.adminEmail}] already exists with matching credentials.`);
+      }
     }
   } catch (err: any) {
     logger.error(`Seed error: ${err.message}`);

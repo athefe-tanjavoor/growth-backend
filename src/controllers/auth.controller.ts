@@ -91,21 +91,26 @@ export class AuthController {
         expires: session.expiresAt,
       });
 
-      return ApiResponse.success(
-        res,
-        {
+      const userPayload = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar,
+        isTwoFactorEnabled: user.isTwoFactorEnabled,
+      };
+
+      return res.status(200).json({
+        success: true,
+        message: 'Login successful',
+        token: session.accessToken,
+        user: userPayload,
+        data: {
           token: session.accessToken,
-          user: {
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            avatar: user.avatar,
-            isTwoFactorEnabled: user.isTwoFactorEnabled,
-          },
+          user: userPayload,
         },
-        'Login successful'
-      );
+        timestamp: new Date().toISOString(),
+      });
     } catch (error) {
       next(error);
     }
@@ -176,7 +181,12 @@ export class AuthController {
   static async getMe(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await User.findById(req.user!._id).select('-password');
-      return ApiResponse.success(res, { user });
+      return res.status(200).json({
+        success: true,
+        user,
+        data: { user },
+        timestamp: new Date().toISOString(),
+      });
     } catch (error) {
       next(error);
     }

@@ -16,8 +16,11 @@ export class PortfolioController {
   static async getAdminPortfolios(req: Request, res: Response, next: NextFunction) {
     try {
       const portfolios = await Portfolio.find().sort({ createdAt: -1 }).lean();
-      // Returns array directly or wrapped for compatibility with both frontends
-      return res.status(200).json(portfolios);
+      return res.status(200).json({
+        success: true,
+        portfolios,
+        data: portfolios,
+      });
     } catch (error) {
       next(error);
     }
