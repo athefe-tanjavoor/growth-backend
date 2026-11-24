@@ -8,7 +8,7 @@ async function bootstrap() {
   try {
     const app = createApp();
 
-    const server = app.listen(config.port, () => {
+    const server = app.listen(config.port, '0.0.0.0', () => {
       logger.info(`🚀 Growthanalys Backend v2.0 running on port ${config.port}`);
       logger.info(`🌐 Environment: ${config.env}`);
       logger.info(`📡 API Endpoint: http://localhost:${config.port}/api/v1`);
