@@ -6,12 +6,6 @@ import { seedDatabase } from './jobs/seed.js';
 
 async function bootstrap() {
   try {
-    // Connect to MongoDB Atlas
-    await connectDB();
-
-    // Run safe idempotency check & seeder
-    await seedDatabase();
-
     const app = createApp();
 
     const server = app.listen(config.port, () => {
@@ -32,6 +26,19 @@ async function bootstrap() {
 
     process.on('SIGTERM', () => shutdown('SIGTERM'));
     process.on('SIGINT', () => shutdown('SIGINT'));
+
+    // Connect to MongoDB Atlas
+    if (!config.mongodb.uri) {
+      logger.warn('⚠️ MONGODB_URI environment variable is missing or empty! Database operations will fail until configured.');
+    } else {
+      try {
+        await connectDB();
+        await seedDatabase();
+      } catch (dbError: any) {
+        logger.error(`❌ Initial MongoDB Connection Failed: ${dbError.message}`);
+        logger.warn('⚠️ Server remains running to serve health checks and allow environment updates.');
+      }
+    }
   } catch (error: any) {
     logger.error(`Fatal Startup Error: ${error.message}`);
     process.exit(1);
