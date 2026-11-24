@@ -24,8 +24,8 @@ export function getR2Client(): S3Client {
     region: 'auto',
     endpoint: endpoint || (accountId ? `https://${accountId}.r2.cloudflarestorage.com` : undefined),
     credentials: {
-      accessKeyId: accessKeyId || 'dummy',
-      secretAccessKey: secretAccessKey || 'dummy',
+      accessKeyId: accessKeyId || '',
+      secretAccessKey: secretAccessKey || '',
     },
   });
 

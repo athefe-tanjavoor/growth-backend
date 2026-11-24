@@ -7,15 +7,15 @@ export const config = {
   apiPrefix: process.env.API_PREFIX || '/api/v1',
   
   jwt: {
-    secret: process.env.JWT_SECRET || 'dev_jwt_secret_growthanalys_2026_key_at_least_32_chars',
-    refreshSecret: process.env.JWT_REFRESH_SECRET || 'dev_jwt_refresh_growthanalys_2026_key_at_least_32_chars',
+    secret: process.env.JWT_SECRET || '',
+    refreshSecret: process.env.JWT_REFRESH_SECRET || '',
     accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '15m',
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
-    cookieSecret: process.env.COOKIE_SECRET || 'dev_cookie_secret_growthanalys',
+    cookieSecret: process.env.COOKIE_SECRET || '',
   },
 
   mongodb: {
-    uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/growthanalys_admin',
+    uri: process.env.MONGODB_URI || '',
   },
 
   cors: {
@@ -28,14 +28,14 @@ export const config = {
     accountId: process.env.R2_ACCOUNT_ID || '',
     accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
-    bucketName: process.env.R2_BUCKET_NAME || 'growthanalys-media',
+    bucketName: process.env.R2_BUCKET_NAME || '',
     publicUrl: (process.env.R2_PUBLIC_URL || '').replace(/\/$/, ''),
     endpoint: process.env.R2_ENDPOINT || '',
   },
 
   seed: {
-    adminName: process.env.ADMIN_INITIAL_NAME || 'Muhil',
-    adminEmail: process.env.ADMIN_INITIAL_EMAIL || 'admin@growthanalys.com',
-    adminPassword: process.env.ADMIN_INITIAL_PASSWORD || 'Vetri nichayam',
+    adminName: process.env.ADMIN_INITIAL_NAME || '',
+    adminEmail: process.env.ADMIN_INITIAL_EMAIL || '',
+    adminPassword: process.env.ADMIN_INITIAL_PASSWORD || '',
   }
 };

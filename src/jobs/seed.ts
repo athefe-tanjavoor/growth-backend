@@ -5,12 +5,17 @@ import { logger } from '../utils/logger.js';
 
 export async function seedDatabase() {
   try {
+    if (!config.seed.adminEmail || !config.seed.adminPassword) {
+      logger.info('Database seeding skipped: ADMIN_INITIAL_EMAIL or ADMIN_INITIAL_PASSWORD not configured.');
+      return;
+    }
+
     const existingAdmin = await User.findOne({ email: config.seed.adminEmail });
 
     if (!existingAdmin) {
       logger.info(`Seeding initial super-admin: ${config.seed.adminEmail}`);
       const admin = new User({
-        name: config.seed.adminName,
+        name: config.seed.adminName || 'Admin',
         email: config.seed.adminEmail,
         password: config.seed.adminPassword,
         role: Role.SUPER_ADMIN,
@@ -25,9 +30,9 @@ export async function seedDatabase() {
         existingAdmin.password = config.seed.adminPassword;
         existingAdmin.isActive = true;
         await existingAdmin.save();
-        logger.info(`🔑 Reset password for existing admin: [${config.seed.adminEmail}]`);
+        logger.info(`🔑 Synchronized password for admin: [${config.seed.adminEmail}]`);
       } else {
-        logger.info(`Admin user [${config.seed.adminEmail}] already exists with matching credentials.`);
+        logger.info(`Admin user [${config.seed.adminEmail}] is up to date.`);
       }
     }
   } catch (err: any) {
